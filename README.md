@@ -1,4 +1,4 @@
-GeoIP Redirector for WPML (WordPress)
+GeoIP Redirector for WPML
 =======================================
 
 
