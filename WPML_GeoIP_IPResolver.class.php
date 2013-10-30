@@ -49,11 +49,6 @@ class WPML_GeoIP_IPResolver
 
 		//MaxMind gets cranky when we don't use the full path
 		$this->db = geoip_open(plugin_dir_path(__FILE__) . '/database/GeoIP.dat', GEOIP_STANDARD);
-
-		/**
-		 * Coming mappings
-		 * England, Germany, France, Russia => 'gb'
-		 */
 	}
 	/**
 	 * Returns a WPML-compatible country code from an IP address
