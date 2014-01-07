@@ -1,7 +1,3 @@
-//Tmp stuff
-//FIXME: This is basically 100% broken. en locale is en-us n not just en. Duh. :( GeoIP to the rescue
-//var wpml_browser_redirect_params = {"pageLanguage":"fi","languageUrls":{"sv":"http:\/\/montejaur.com\/","da":"http:\/\/montejaur.com\/da\/","en-us":"http:\/\/montejaur.com\/en\/","fi":"http:\/\/montejaur.com\/fi\/","nb":"http:\/\/montejaur.com\/nb\/","gb":"http:\/\/montejaur.com\/gb\/"},"cookie":{"name":"_icl_visitor_lang_js","domain":"montejaur.com","path":"\/","expiration":24}};
-
 jQuery(document).ready(function ()
 {
     if (jQuery.cookie != undefined)
