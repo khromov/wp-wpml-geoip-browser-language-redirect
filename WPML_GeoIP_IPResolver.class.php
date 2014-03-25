@@ -43,9 +43,9 @@ class WPML_GeoIP_IPResolver
 		//Set the default WPML language which is used if no matching language is found
 		$this->default_language = 'sv';
 
-		include('lib/geoip-api-php/geoip.inc');
-		include('lib/geoip-api-php/geoipregionvars.php');
-		include('lib/geoip-api-php/timezone/timezone.php');
+		include_once('lib/geoip-api-php/geoip.inc');
+		include_once('lib/geoip-api-php/geoipregionvars.php');
+		include_once('lib/geoip-api-php/timezone/timezone.php');
 
 		//MaxMind gets cranky when we don't use the full path
 		$this->db = geoip_open(plugin_dir_path(__FILE__) . '/database/GeoIP.dat', GEOIP_STANDARD);
