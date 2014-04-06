@@ -1,0 +1,7 @@
+Version 1.1
+- Checked compatibility with WPML 3.1.4
+- Added utilities for debugging the javascript
+- General code cleanup
+
+Version 1.0
+- Initial release

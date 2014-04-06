@@ -3,7 +3,7 @@
 Plugin Name: WPML GeoIP Browser Language Redirect
 Plugin URI: http://khromov.se
 Description: Redirects users to their appropriate languages intelligently by utilizing the MaxMind GeoIP database
-Version: 1.0
+Version: 1.1
 Author: khromov
 Author URI: http://khromov.se
 License: GPL2
@@ -20,8 +20,9 @@ class WPML_GeoIP_Browser_Language_Redirect
 		//Register AJAX endpoint
 		add_filter('query_vars', array(&$this, 'register_vars'));
 		add_action('wp', array(&$this, 'register_endpoints'));
-		//template_redirect hook is slow, let's use the wp hook instead
-		//other usable hooks are pre_get_posts
+		//template_redirect is suh-low
+		//pre_get_posts is pretty close
+		//wp too
 	}
 
 	/** Unload old browser redirect and add new one **/
