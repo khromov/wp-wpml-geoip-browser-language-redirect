@@ -91,8 +91,12 @@ class WPML_GeoIP_Browser_Language_Redirect
 			$ipr = new WPML_GeoIP_IPResolver();
 
 			$ipr->set_json_header();
-			$tmp_ip = $_SERVER['REMOTE_ADDR'];
-			echo $ipr->ip_to_wpml_country_code($_SERVER['REMOTE_ADDR']);
+			if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) {
+				$tmp_ip = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
+			} else {
+				$tmp_ip = $_SERVER['REMOTE_ADDR'];
+			}
+			echo $ipr->ip_to_wpml_country_code($tmp_ip);
 			die();
 		}
 	}
