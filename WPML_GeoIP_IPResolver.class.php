@@ -42,11 +42,15 @@ class WPML_GeoIP_IPResolver
 
 		//Set the default WPML language which is used if no matching language is found
 		$this->default_language = 'sv';
-
-		include_once('lib/geoip-api-php/geoip.inc');
-		include_once('lib/geoip-api-php/geoipregionvars.php');
-		include_once('lib/geoip-api-php/timezone/timezone.php');
-
+		
+		//Make sure to not redeclare the GeoIP API if it is loaded already.
+		if(!function_exists('geoip_country_code_by_addr')) 
+		{
+			include_once('lib/geoip-api-php/geoip.inc');
+			include_once('lib/geoip-api-php/geoipregionvars.php');
+			include_once('lib/geoip-api-php/timezone/timezone.php');
+		}
+		
 		//MaxMind gets cranky when we don't use the full path
 		$this->db = geoip_open(plugin_dir_path(__FILE__) . '/database/GeoIP.dat', GEOIP_STANDARD);
 	}
