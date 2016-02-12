@@ -36,8 +36,9 @@ jQuery(document).ready(function()
             var cookie_params = wpml_browser_redirect_params.cookie;
             var pageLanguage = wpml_browser_redirect_params.pageLanguage;
             var cookie_name = cookie_params.name;
+            var browserLanguage;
 
-            //Check if we already did a redirect, and if we didn't...
+            //Check if we already know the browser location, and if we don't...
             if (!jQuery.cookie(cookie_name))
             {
                 if(GEOIP_DEBUG)
@@ -64,55 +65,55 @@ jQuery(document).ready(function()
                 // Set the cookie so that the check is made only on the first visit
                 jQuery.cookie(cookie_name, browserLanguage, cookie_options);
 
-                // Compare page language and browser language
-                if (pageLanguage != browserLanguage)
+            } else {
+
+                browserLanguage = jQuery.cookie(cookie_name);
+
+            }
+
+            // Compare page language and browser language
+            if (pageLanguage != browserLanguage)
+            {
+                if(GEOIP_DEBUG)
+                    console.log("Page language is not correct for the user");
+
+                var redirectUrl;
+                // First try to find the redirect url from parameters passed to javascript
+                var languageUrls = wpml_browser_redirect_params.languageUrls;
+
+                if (languageUrls[browserLanguage] != undefined)
                 {
                     if(GEOIP_DEBUG)
-                        console.log("Page language is not correct for the user");
+                        console.log("Found redirection in conditional 1");
 
-                    var redirectUrl;
-                    // First try to find the redirect url from parameters passed to javascript
-                    var languageUrls = wpml_browser_redirect_params.languageUrls;
+                    redirectUrl = languageUrls[browserLanguage];
+                }
+                else if (languageUrls[browserLanguage.substr(0, 2)] != undefined)
+                {
+                    if(GEOIP_DEBUG)
+                        console.log("Found redirection in conditional 2");
 
-                    if (languageUrls[browserLanguage] != undefined)
-                    {
-                        if(GEOIP_DEBUG)
-                            console.log("Found redirection in conditional 1");
-
-                        redirectUrl = languageUrls[browserLanguage];
-                    }
-                    else if (languageUrls[browserLanguage.substr(0, 2)] != undefined)
-                    {
-                        if(GEOIP_DEBUG)
-                            console.log("Found redirection in conditional 2");
-
-                        redirectUrl = languageUrls[browserLanguage];
-                    }
-                    else
-                    {
-                        if(GEOIP_DEBUG)
-                            console.log("The user should have been redirected, but we could not find the localized version of the page.");
-                    }
-
-                    //Finally do the redirect, if this pages language exists
-                    if (redirectUrl != undefined)
-                    {
-                        if(GEOIP_DEBUG)
-                            console.log("Redirecting user!");
-
-                        window.location = redirectUrl;
-                    }
+                    redirectUrl = languageUrls[browserLanguage];
                 }
                 else
                 {
                     if(GEOIP_DEBUG)
-                        console.log("User not redirected because he is already on the right language.");
+                        console.log("The user should have been redirected, but we could not find the localized version of the page.");
+                }
+
+                //Finally do the redirect, if this pages language exists
+                if (redirectUrl != undefined)
+                {
+                    if(GEOIP_DEBUG)
+                        console.log("Redirecting user!");
+
+                    window.location = redirectUrl;
                 }
             }
             else
             {
                 if(GEOIP_DEBUG)
-                    console.log("User has already been redirected.");
+                    console.log("User not redirected because he is already on the right language.");
             }
         }
     }
