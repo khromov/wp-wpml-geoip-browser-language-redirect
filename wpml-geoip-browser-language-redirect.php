@@ -39,7 +39,7 @@ class WPML_GeoIP_Browser_Language_Redirect
 		$args['skip_missing'] = intval($sitepress_settings['automatic_redirect'] == 1);
 
 		//Build multi language urls array
-		$languages = $sitepress->get_ls_languages($args);
+		$languages = apply_filters( 'wpml_active_languages', null, $args );
 		$language_urls = array();
 		foreach($languages as $language)
 			$language_urls[$language['language_code']] = $language['url'];
