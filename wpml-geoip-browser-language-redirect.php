@@ -23,7 +23,86 @@ class WPML_GeoIP_Browser_Language_Redirect
 		//template_redirect is suh-low
 		//pre_get_posts is pretty close
 		//wp too
+
+		if ( is_admin() ) {
+			add_action( 'admin_menu', array( $this, 'add_admin_page_wpml_geo_redirect' ) );
+			add_action( 'admin_menu', array( $this, 'digest_post_data' ) );
+		}
 	}
+
+
+	function digest_post_data(){
+
+		if( isset( $_POST['language_mappings'] )  ){
+
+			$location = 'options-general.php?page=wpml_geo_redirect_settings';
+
+			if( !wp_verify_nonce( $_POST['_wpnonce'], 'wpml_geo_redirect_update_action' )){
+				$this->redirect_user( $location . '&feedback=form_submission_error' );
+			}
+
+			// Put whatever comes as country-language code combo into an array
+			$data_for_option = array();
+
+			foreach( $_POST['language_mappings'] as $val ){
+
+				if( $val['country'] != 'country_code_ddown_label' ) {
+
+					if(	array_key_exists ( $val['country']  , $data_for_option ) ){
+						$this->redirect_user( $location . '&feedback=duplicate_key' );
+					}
+
+					$data_for_option[ $val['country'] ] = $val['language'];
+				}
+			}
+
+
+			// Remove any country code marked for removal
+			if( isset( $_POST['remove_country_code'] ) ){
+				foreach( $_POST['remove_country_code'] as $country_code ){
+					unset( $data_for_option[$country_code] );
+				}
+			}
+			
+			// Save in DB and redirect
+			update_option( 'wpml_geo_redirect_default_language' , trim( $_POST['default_redirect_language'] ) );
+			update_option( 'wpml_geo_redirect_language_mappings' , $data_for_option );
+
+			$this->redirect_user( $location . '&feedback=success' );
+		}
+
+	}
+
+
+	function redirect_user( $location ){
+		header("Location: $location");
+		exit();
+	}
+
+
+	function add_admin_page_wpml_geo_redirect(){
+
+		add_options_page(
+			'WPML GEO Redirect',
+			'WPML GEO Redirect',
+			'manage_options',
+			'wpml_geo_redirect_settings',
+			array( $this, 'wpml_geo_redirect_admin_page' ) );
+	}
+	
+
+	function wpml_geo_redirect_admin_page(){
+
+		$language_mappings      = get_option( 'wpml_geo_redirect_language_mappings' );
+		$default_language       = get_option( 'wpml_geo_redirect_default_language' );
+
+		include 'WPML_GEOIP_admin_page.class.php';
+
+		$admin_page = new WPML_geoip_admin_page( $language_mappings , $default_language );
+		$admin_page->display_wpml_geo_redirect_admin_page();
+
+	}
+
 
 	/** Unload old browser redirect and add new one **/
 	function enqueue_scripts()
