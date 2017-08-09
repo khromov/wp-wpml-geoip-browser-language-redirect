@@ -6,7 +6,7 @@ class WPML_geoip_admin_page
 	var $language_mappings;
 	var $default_language;
 
-	
+
 	function __construct( $language_mappings , $default_language ){
 		$this->language_mappings = $language_mappings;
 		$this->default_language  = $default_language;
