@@ -93,6 +93,8 @@ class WPML_GeoIP_Browser_Language_Redirect
 
 	function wpml_geo_redirect_admin_page(){
 
+		$this->set_wp_options_with_default_values_if_necessary();
+
 		$language_mappings      = get_option( 'wpml_geo_redirect_language_mappings' );
 		$default_language       = get_option( 'wpml_geo_redirect_default_language' );
 
@@ -102,6 +104,24 @@ class WPML_GeoIP_Browser_Language_Redirect
 		$admin_page->display_wpml_geo_redirect_admin_page();
 
 	}
+
+	private function set_wp_options_with_default_values_if_necessary(){
+
+        if ( null === get_option( 'wpml_geo_redirect_language_mappings' , null ) ) {
+            $languages = apply_filters( 'wpml_active_languages', NULL, 'orderby=id&order=desc' );
+
+            if ( !empty( $languages ) ) {
+                $arr = array_keys( $languages );
+                $default_language_mapping = array( 'SE' => $arr[0] );
+                add_option( 'wpml_geo_redirect_language_mappings' , $default_language_mapping );
+            }
+        }
+        if ( null === get_option( 'wpml_geo_redirect_default_language' , null ) ) {
+            $default_language = apply_filters('wpml_default_language', NULL);
+            add_option('wpml_geo_redirect_default_language', $default_language);
+        }
+
+    }
 
 
 	/** Unload old browser redirect and add new one **/
