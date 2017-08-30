@@ -24,6 +24,22 @@ class WPML_geoip_admin_page
 
 			<form method="post" action="options-general.php?page=wpml_geo_redirect_settings" id="options_form" >
 				<?php
+				/* $devd_arr = get_option( 'wpml_geo_redirect_language_mappings' );
+				echo "<pre>";print_r($devd_arr);echo "</pre>";
+				$country_arr = $lang_codes_arr = $lang_currency_arr = array();
+				foreach($devd_arr as $keyy=>$valuee){
+					$country_arr[] = $keyy;
+					foreach($valuee as $keys=>$values){
+						$lang_codes_arr[] = $keys;
+						$lang_currency_arr[] = $values;
+					}
+				}
+				$language_mappings_arr = array_combine($country_arr,$lang_codes_arr);
+				echo "<pre>";print_r($language_mappings_arr);echo "</pre>";
+				echo "<pre>";print_r($country_arr);echo "</pre>";
+				echo "<pre>";print_r($lang_codes_arr);echo "</pre>";
+				echo "<pre>";print_r($lang_currency_arr);echo "</pre>"; */
+				
 				echo '<table class="form-table" >';
 				echo "<tr>
 						<td>Country Code / Language Code</td>
@@ -87,6 +103,10 @@ class WPML_geoip_admin_page
 		$table_row = 0;
 
 		foreach( $language_mappings as $country_code => $lang_code){
+			foreach($lang_code as $key=>$value){
+				$lang_codes = $key;
+				$lang_currency = $value;
+			}
 
 			echo '<tr valign="top">';
 			echo '<td>';
@@ -94,7 +114,10 @@ class WPML_geoip_admin_page
 			echo "&nbsp;";
 			echo $this->display_mm_country_code_dropdown( $table_row , $country_code );
 			echo "<strong> => </strong>";
-			echo $this->display_language_code_dropdown( $table_row , $lang_code );
+			echo $this->display_language_code_dropdown( $table_row , $lang_codes );
+			echo '</td>';
+			echo '<td>';
+			echo $this->display_language_currency_dropdown_devd( $table_row , $lang_currency);
 			echo '</td>';
 			echo '<td>';
 			echo '<input type="checkbox" name="remove_country_code['.$table_row.']" value="' . $country_code . '">';
@@ -185,15 +208,38 @@ class WPML_geoip_admin_page
 
 		return $output;
 	}
+	
+	private function display_language_currency_dropdown_devd( $table_row=0 , $lang_curr_param='' , $is_default=false ){
+
+		global $woocommerce_wpml;
+		$currency_arr = $woocommerce_wpml->multi_currency->get_currencies('include_default = true');
+
+		$select_name = 'language_mappings[' . $table_row . '][currency]';
+
+		$output = '<select name="' . $select_name . '" >';
+
+		foreach($currency_arr as $key => $value){
+
+			$selected = $this->selected_html( $key , $lang_curr_param );
+			$output .= "<option {$selected} >{$key}</option>";
+		}
+
+		$output .= "</select>";
+
+		return $output;
+	}
 
 
 	private function display_add_new_country_mapping_row( $table_row ){
-
+		
 		echo '<tr valign="top" style="border-top: dotted black 2px;">';
 		echo '<td>';
 		echo $this->display_mm_country_code_dropdown( $table_row, null, true );
 		echo "<strong> => </strong>";
 		echo $this->display_language_code_dropdown( $table_row );
+		echo '</td>';
+		echo '<td>';
+		echo $this->display_language_currency_dropdown_devd( $table_row );
 		echo '</td>';
 		echo '<td>';
 		echo "&nbsp;";

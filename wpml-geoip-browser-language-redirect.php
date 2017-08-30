@@ -51,8 +51,10 @@ class WPML_GeoIP_Browser_Language_Redirect
 					if(	array_key_exists ( $val['country']  , $data_for_option ) ){
 						$this->redirect_user( $location . '&feedback=duplicate_key' );
 					}
+					$lang_n_curr = array();
+					$lang_n_curr[$val['language']] = $val['currency'];
 
-					$data_for_option[ $val['country'] ] = $val['language'];
+					$data_for_option[ $val['country'] ] = $lang_n_curr;
 				}
 			}
 
