@@ -39,6 +39,11 @@ class WPML_geoip_admin_page
 				echo "<pre>";print_r($country_arr);echo "</pre>";
 				echo "<pre>";print_r($lang_codes_arr);echo "</pre>";
 				echo "<pre>";print_r($lang_currency_arr);echo "</pre>"; */
+				/* $default_language_arr = get_option( 'wpml_geo_redirect_default_language' );
+				foreach($default_language_arr as $key=>$value){
+					$default_langguage = $key;
+				}
+				echo $default_langguage."==xx"; */
 				
 				echo '<table class="form-table" >';
 				echo "<tr>
@@ -214,7 +219,7 @@ class WPML_geoip_admin_page
 		global $woocommerce_wpml;
 		$currency_arr = $woocommerce_wpml->multi_currency->get_currencies('include_default = true');
 
-		$select_name = 'language_mappings[' . $table_row . '][currency]';
+		$select_name = $is_default === true ? 'default_redirect_currency' : 'language_mappings[' . $table_row . '][currency]';
 
 		$output = '<select name="' . $select_name . '" >';
 
@@ -250,14 +255,19 @@ class WPML_geoip_admin_page
 
 
 	private function display_select_default_language_row( $table_row , $default_language ){
-
+		$default_lng_arr = get_option( 'wpml_geo_redirect_default_language' );
 		echo '<tr valign="top" style="border-top: dotted black 2px;">';
 		echo '<td colspan="2">';
 		echo "Any other place on this planet";
 		echo "<strong> => </strong>";
 		echo $this->display_language_code_dropdown( $table_row , $default_language , true );
 		echo '</td>';
+		echo '<td>';
+		echo $this->display_language_currency_dropdown_devd( $table_row, $default_lng_arr[$default_language] , true );
+		echo '</td>';
+		echo '<td>';
+		echo "&nbsp;";
+		echo '</td>';
 		echo '</tr>';
-
 	}
 }

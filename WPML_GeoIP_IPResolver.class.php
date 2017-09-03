@@ -56,7 +56,11 @@ class WPML_GeoIP_IPResolver
 
 		//Set the default WPML language which is used if no matching language is found
 		//$this->default_language = 'sv';
-		$this->default_language = get_option( 'wpml_geo_redirect_default_language' );
+		$default_language_arr = get_option( 'wpml_geo_redirect_default_language' );
+		foreach($default_language_arr as $key=>$value){
+			$default_langguage = $key;
+		}
+		$this->default_language = $default_langguage;
 		
 		//Make sure to not redeclare the GeoIP API if it is loaded already.
 		if(!function_exists('geoip_country_code_by_addr')) 

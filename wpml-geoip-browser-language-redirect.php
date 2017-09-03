@@ -42,7 +42,7 @@ class WPML_GeoIP_Browser_Language_Redirect
 			}
 
 			// Put whatever comes as country-language code combo into an array
-			$data_for_option = array();
+			$data_for_option = $default_redirect_currency = array();
 
 			foreach( $_POST['language_mappings'] as $val ){
 
@@ -66,8 +66,11 @@ class WPML_GeoIP_Browser_Language_Redirect
 				}
 			}
 			
+			$default_redirect_currency[$_POST['default_redirect_language']] = $_POST['default_redirect_currency'];
+			
 			// Save in DB and redirect
-			update_option( 'wpml_geo_redirect_default_language' , trim( $_POST['default_redirect_language'] ) );
+			/* update_option( 'wpml_geo_redirect_default_language' , trim( $_POST['default_redirect_language'] ) ); */
+			update_option( 'wpml_geo_redirect_default_language' , $default_redirect_currency );
 			update_option( 'wpml_geo_redirect_language_mappings' , $data_for_option );
 
 			$this->redirect_user( $location . '&feedback=success' );
@@ -98,7 +101,10 @@ class WPML_GeoIP_Browser_Language_Redirect
 		$this->set_wp_options_with_default_values_if_necessary();
 
 		$language_mappings      = get_option( 'wpml_geo_redirect_language_mappings' );
-		$default_language       = get_option( 'wpml_geo_redirect_default_language' );
+		$default_language_arr       = get_option( 'wpml_geo_redirect_default_language' );
+		foreach($default_language_arr as $key=>$value){
+			$default_language = $key;
+		}
 
 		include 'WPML_GEOIP_admin_page.class.php';
 
