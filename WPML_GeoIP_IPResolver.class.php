@@ -40,12 +40,27 @@ class WPML_GeoIP_IPResolver
 			'US' => 'en', //USA
 			'CA' => 'en'  //Canada
 		); */
+		$devd_arr = get_option( 'wpml_geo_redirect_language_mappings' );
+		$country_arr = $lang_codes_arr = $lang_currency_arr = array();
+		foreach($devd_arr as $keyy=>$valuee){
+			$country_arr[] = $keyy;
+			foreach($valuee as $keys=>$values){
+				$lang_codes_arr[] = $keys;
+				$lang_currency_arr[] = $values;
+			}
+		}
+		$language_mappings_arr = array_combine($country_arr,$lang_codes_arr);
 
-		$this->language_mappings = get_option( 'wpml_geo_redirect_language_mappings' );
+		/* $this->language_mappings = get_option( 'wpml_geo_redirect_language_mappings' ); */
+		$this->language_mappings = $language_mappings_arr;
 
 		//Set the default WPML language which is used if no matching language is found
 		//$this->default_language = 'sv';
-		$this->default_language = get_option( 'wpml_geo_redirect_default_language' );
+		$default_language_arr = get_option( 'wpml_geo_redirect_default_language' );
+		foreach($default_language_arr as $key=>$value){
+			$default_langguage = $key;
+		}
+		$this->default_language = $default_langguage;
 		
 		//Make sure to not redeclare the GeoIP API if it is loaded already.
 		if(!function_exists('geoip_country_code_by_addr')) 
