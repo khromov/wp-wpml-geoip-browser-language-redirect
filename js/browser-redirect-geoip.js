@@ -81,7 +81,7 @@ jQuery(document).ready(function()
 
                         redirectUrl = languageUrls[browserLanguage];
                     }
-                    else if (languageUrls[browserLanguage.substr(0, 2)] != undefined)
+                    else if (browserLanguage && browserLanguage != 'undefined' && languageUrls[browserLanguage.substr(0, 2)] != undefined)
                     {
                         if(GEOIP_DEBUG)
                             console.log("Found redirection in conditional 2");
