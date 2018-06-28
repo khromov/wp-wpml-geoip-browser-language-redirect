@@ -193,6 +193,8 @@ class WPML_GeoIP_Browser_Language_Redirect
 			if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) {
 				$tmp_ip_array = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
 				$tmp_ip = $tmp_ip_array[0];
+			} else if (array_key_exists('HTTP_FORWARDED', $_SERVER)) {
+				$tmp_ip = str_replace('for=','', $_SERVER['HTTP_FORWARDED']);
 			} else {
 				$tmp_ip = $_SERVER['REMOTE_ADDR'];
 			}
