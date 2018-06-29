@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: WPML GeoIP Browser Language Redirect
-Plugin URI: http://khromov.se
+Plugin URI: http://wpgenius.in
 Description: Redirects users to their appropriate languages intelligently by utilizing the MaxMind GeoIP database
 Version: 1.1
-Author: khromov
-Author URI: http://khromov.se
+Author: Makarand Mane
+Author URI: http://www.makarandmane.com
 License: GPL2
 */
 
